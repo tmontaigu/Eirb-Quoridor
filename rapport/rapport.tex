@@ -1,0 +1,348 @@
+\documentclass[a4paper, draft]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage[left=3cm,right=3cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata,positioning}
+\usepackage{verbatim}
+
+
+
+\title{Projet : Quoridor}
+\author{Montaigu Thomas \\ Rakotosaona Marie-Julie \\ Mattiche Mohamed-said}
+
+\begin{document}
+
+\maketitle
+
+\newpage
+\tableofcontents
+\newpage
+
+\section{Le Jeu}
+Quoridor est un jeu de société où les joueurs ont pour objectif de traverser  le plateau de jeu avec leurs pions. Les joueurs ont la possibilité de placer des murs afin de ralentir la progression des joueurs adverses.
+
+\subsection{Définitions}
+
+\begin{itemize}
+
+\item \textbf{Plateau}: Le plateau est la zone de jeu, il est composé de cases positionnées de façon à former une grille  de taille 9*9 permettant de poser les pions et de zones permettant de poser des murs entre les cases. Le plateau possède deux états disctincts : franchissable et infranchissable. S'il existe au moins un chemin qui permet à chaque pion d'arriver sur sa case finale alors le plateau est dit franchissable dans le cas contraire il est infranchissable. 
+
+
+\item \textbf{Case}: Les cases sont les parties du plateau qui accueuillent les pions, il ne peut y avoir qu'un seul pion sur 1 case.
+Les cases sont repérées grâce à une lettre représentant la colonne et un chiffre pour la ligne.
+
+
+\item \textbf{Mur}: Les murs sont des objets infranchissables par les pions qui peuvent être placés entre les cases. Ils peuvent être positonnés verticalement ou horizontalement. Leurs positions sur le plateau est définie par une case origine  et une direction.
+\item \textbf{Case adjacente}: Deux cases sont adjacentes si elles partagent un même côté.
+\item \textbf{Case voisine}: Une case est voisine d'une autre si elle est accessible à partir de cette dernière : les deux cases sont adjacentes et ne sont pas séparées par un mur.
+\item \textbf{Voisins}: Les voisins d'une case est l'ensemble de ses cases voisines
+\item \textbf{Chemin}: Un chemin est une séquence de cases voisines deux à deux. On appellera départ la première case d'un chemin et arrivée sa dernière.
+\item \textbf{Chemin valide}: Un chemin est valide s'il permet, à partir de la case de départ, d'arriver sur la ligne de départ de l'adversaire. 
+\item \textbf{Case finale}: Une case est finale si pour un pion donné (blanc ou noir), elle appartient à la rangée opposée à l'emplacement de départ du pion 
+\end{itemize}
+
+\subsection{Les règles}
+
+Un joueur gagne lorsque son pion atteint un case finale.\\
+A chaque tour, un joueur déplace son pion ou place un mur.
+
+Les pions ne se déplacent que d'une case et sur une case adjacente (pas en diagonale) par tour.\\
+Un pion ne peut pas acceder à une case bloquée par un mur.
+
+Si sur une case, un pion a pour voisin un autre pion, il peut sauter par dessus la case de cet autre pion. \\
+Si cette dernière est déjà prise ou qu'un mur empeche le déplacement, le pion peut se déplacer sur une case adjacente à la case du pion voisin ( en diagonale ).\\
+Un mur ne peut etre positionné que si après son positionnement, les deux pions peuvent encore arriver sur la ligne d'arrivée : il existe un chemin valide à partir de chacune d'elles. Le plateau est alors dit franchissable.
+
+\section{Implémentation}
+\subsection{Les règles}
+Afin de créer un programme pour le jeu, il est nécéssaire de respecter les règles et donc de créer des algorithmes permettant de vérifier ces règles.\\
+Les règles à implémenter sont :
+\begin{itemize}
+
+  \item Vérifier que les joueurs n'effectuent qu'une seule action par tour. Soit déplacer leur pion, soit placer un mur.
+  \item Vérifier que les déplacements des pions sont valides en vérifiant trois points:
+      \begin{itemize}
+        \item le pion doit rester dans la grille.
+        \item le pion ne peut se déplacer que d'une case à une autre, sauf lorsqu'il saute le pions adverse.
+        \item vérifier que les pions ne traversent pas de murs lors d'un déplacement.
+      \end{itemize}
+      \item Vérifier qu'un joueur n'utilise pas plus de murs qu'il n'en possède.
+      \item Vérifier que le placement d'un mur n'empeche pas les joueurs d'atteindre la ligne d'arrivée.
+      
+
+\end{itemize}
+
+La règle nécessitant l'algorithme le plus complexe est la règle qui impose que lorsqu'un mur est posé il ne doit pas rendre le plateau infranchissable ou bloquer un pion.
+Cette règle va necéssiter la création d'un algorithme capable de trouver au moins un chemin menant vers une case finale pour chaque pion.
+
+
+\subsection{Représentation des éléménts/structures}
+
+Avant de commencer à réflechir aux algorithmes permettant l'implémentation des règles il nous a fallu réfléchir à la façon dont nous allions définir nos structures
+qui représenteraient les différents éléments du jeu. 
+
+Les deux éléments les plus importants et donc ceux à définir de façon la plus complète sont le \textbf{Plateau} et les \textbf{cases}.\\
+En effet les cases contiennent les informations suivante:
+\begin{itemize}
+ \item la présence ou non présence de murs sur leurs cotées.
+ \item présence ou non d'un pion (et sa couleur).
+\end{itemize}
+La notation imposée précise que l'entier correspondant au pion noir est \verb?1? et le pion blanc a pour entier correspondant \verb?0?.
+
+
+Quant à lui le plateau contient les informations sur la positions des cases entres elles, c'est lui qui défini l'agencement de la grille.
+Il contient aussi d'autres informations, comme le nombres de murs restant à chaque joueur.
+
+
+\begin{verbatim}
+            
+structure Case { pion : entier
+                 murDroite : entier
+                 murBas                             
+               }                   
+                                                                
+                                                  
+                     
+structure Plateau :{ Grille[9][9] : Tableau de case
+                     nbMurBlancRst : entier
+                     nbMurNoirRst  : entier
+                     lignePionNoir :  entier
+                     lignePionNoir :  entier         
+                     lignePionBlanc :  entier         
+                     lignePionBlanc :  entier         
+                   }
+
+\end{verbatim}        
+L'idée d'utiliser une matrice pour representer la grille est venue naturellement, c'est la façons la plus simple à comprendre et à manipuler  car c'est la représentation la plus fidèle
+du plateau de jeu.
+Il nous a paru obligatoire de mémoriser la position des pions Blanc et Noir, pour ne pas avoir à reparcourir la grille
+a chaque action des joueurs.
+
+
+
+\subsection{Les algorithmes}
+
+
+
+\subsection{Vérifications de la validité des mouvements des pions}
+
+Dans cette section nous allons parler des algorithmes mis en place afin de vérifier la validité des mouvements des pions en controlant les trois points cités précédemment.\\
+\vspace{0.25cm}\\
+Afin que ces algorithmes aient une compléxité en temps assez faible, nous avons naturellement mis en place une mémoire mémorisant la position du pion blanc et du pion noir
+afin de ne pas avoir à re-parcourir la grille de jeu à chaque appel de ces fonctions. Cette mémoire à été rajouté dans la structure définissant le Plateau.\\
+\vspace{0.15cm}
+
+
+Nous avons écrit un algorithme pour chaque point à vérifier et une procédure faisant appel aux trois fonctions afin de décider si oui ou non le mouvement effectué est valide.
+
+
+Dans toutes les fonctions, \verb?l? et \verb?c? représentent la ligne et la colonne où le joueur \verb?j?  veut déplacer le pion, quand \verb?d? représente la direction dans laquelle
+le pion est déplacé (en fonction de sa case d'origine).\\
+La fonction \verb?verif_deplacement? s'occupe de vérifier que le joueur ne se déplace que d'une ligne ou colonne lors de son déplacement sauf lorsqu'il enjambe le pion adverse,
+\verb?reste_dans_plateau? controle tout simplement que le pion reste dans les limites de la grille du plateau. Quant à la fonction \verb?est_case_voisine?, celle ci s'assure que 
+la case d'origine du pion et celle d'arrivée soient bien voisine, c'est à dire qu'il n'existe aucun mur les séparants.
+\begin{verbatim}
+
+procedure est_deplacement_valide(j,l,c; entiers, P: Plateau):Booléen
+
+     si j=1
+         alors Ligne <- Plateau.lignePionNoir
+               Colonne <-Plateau.colonnePionNoir
+     sinon si j=0
+         alors Ligne <- Plateau.lignePionBlanc
+               Colonne <- Plateau.colonnePionBlanc
+
+     si Ligne-l = 1
+        alors d<-Haut
+     sinon si Ligne-l = -1
+        alors d<-Bas
+     sinon si Colonne-l = 1
+        alors d<-Gauche
+     sinon si Colonne -l = -1
+        alors d<-Droite
+
+
+        si reste_dans_plateau(j,l,c,P)
+           alors si verif_deplacement(j,l,c,P) et est_case_voisine(j,d,P)
+                    retourner vrai
+        sinon retourner faux
+
+
+
+fonction verif_deplacement (j,l,c entiers, P: Plateau ):Booléen
+
+     si j=1
+         alors Ligne <- Plateau.lignePionNoir
+               Colonne <-Plateau.colonnePionNoir
+     sinon si j=0
+         alors Ligne <- Plateau.lignePionBlanc
+               Colonne <- Plateau.colonnePionBlanc
+
+     si |Ligne-l|= 1 et |Colonne-c|=0
+         alors retouner vrai
+     sinon si |Ligne-l|=0 et |Colonne-c|=1
+         alors retourner vrai
+
+     sinon si |Ligne-l|= 2 et |Colonne-c|=0 et Plateau[l-1][c].pion= j-1
+         alors retouner vrai
+     sinon si |Ligne-l|= 0 et |Colonne-c|=2 et Plateau[c-1][l].pion= j-1
+         alors retourner vrai
+
+    sinon retourner faux
+  
+
+fonction restes_dans_plateau (j,l,c: entiers, P: Plateau):Booléen
+      
+     si l<9 et c<9 et l>=0 et c>=0
+        alors retourner vrai
+     sinon retourner faux
+
+fonction est_case_voisine (j: entiers,d; Direction,  P: Plateau):Booléen
+
+     si j=1
+         alors Ligne <- Plateau.lignePionNoir
+               Colonne <-Plateau.colonnePionNoir
+     sinon si j=0
+         alors Ligne <- Plateau.lignePionBlanc
+               Colonne <- Plateau.colonnePionBlanc 
+    
+     si d=Gauche
+        alors si presenceMur a gauche
+                 retourner faux
+              sinon retourner vrai
+     si d=Haut 
+        alors si presenceMur en haut
+                 retourner faux
+              sinon retourner vrai
+     si d=Droite  
+        alors si presenceMur a droite
+                 retourner faux
+              sinon retourner vrai
+     si d=Bas
+        alors si presenceMur en bas
+                 retourner faux
+              sinon retourner vrai  
+
+          
+
+\end{verbatim}
+
+
+
+
+
+
+\subsection{Vérification du non bloquage du jeu}
+
+Pour la fonction qui doit contrôler que l'ajout d'un mur sur le plateau ne rend pas le plateau infranchissable, nous avons décidé de proposer un algorithme récursif.
+Cet algorithme questionne  la case selectionnée pour savoir si c'est une case gagnante pour le joueur, si ce n'est pas le cas elle questionnera récursivement ses voisins. Pour que l'algorithme termine, il faut retenir l'ensemble des cases déja visitées.
+Cet algorithme revient en  à chercher de manière récursive un chemin menant jusqu'à une case finale du pion.
+
+
+
+\begin{verbatim}
+
+fonction mur_valide(P: Plateau valide, l,c: entiers, p:booléen)-> booléen 
+    retourner (chemin_existant_PionNoir(P) & chemin_existant_PionBlanc(P))
+        
+  
+fonction chemin_existant_PionNoir(P: Plateau):booléen
+        M<-crée_matrice(9,9)
+        retourner  chemin_existant(ligne_pion_noir(P), colonne_pion_noir(P), noir,M)
+
+
+ fonction chemin_existant(ligne : entier , colonne : entier, couleur, M): booleen
+           si deja_visité(M,ligne,colonne)
+                 retourner Faux
+          sinon
+                 memorise(M, ligne,colonne)
+                 si estCaseFinale(ligne,colonne, couleur)
+                        retourner vrai
+                sinon
+                         retourner
+                               ( chemin_existant(ligne_pion_noir+1, colonne_pion_noir,M)
+                              ou chemin_existant(ligne_pion_noir-1, colonne_pion_noir,M)
+                              ou chemin_existant(ligne_pion_noir, colonne_pion_noir+1,M)
+                              ou chemin_existant(ligne_pion_noir+1, colonne_pion_noir-1,M))
+ 
+\end{verbatim}
+
+Complexité de  \verb?chemin_existant_pion_noir? : On fait à chaque appel récursif 4 appels. La complexité de l'algorithme est donc exponentielle. Cependant, comme on retient les cases où l'on a déja effectué le calcul, le nombre d'appels récursifs est majoré par le nombre de cases : $9*9=81$.
+
+\subsection{L'affichage}
+Pour pouvoir afficher la partie, le programme d'affichage doit pouvoir afficher une liste de coups passée en paramètres. Sur chaque ligne est donné le coup du premier joueur et le coup du deuxieme.*
+Etant donné qu'il existe une convention de notation de coups, nous devons la respecter.\\
+Cette convention est la suivante :
+
+\begin{center}
+\begin{verbatim}
+
+e8 e2
+e7 e3
+e7h e2h
+
+\end{verbatim}
+\end{center}
+
+Il faut remarquer que lorsqu'un mur est placé, on ne le déplacera plus. De plus, lorsqu'un joueur décide de placer un mur son pion reste immobile. Il faut donc que le programme d'affichage retienne l'état de la partie en cours.
+\\Pour cela nous introduisons la matrice 9*9 d'éléments qui permettra de retenir l'état du jeu. Chaque élément a un champ pour retenir la case,  et un champ pour le mur.
+\\ Le programme est basé sur les deux étapes :
+\begin{itemize}
+
+  \item Traduction et mise en mémoire d'un ligne de jeu dans la matrice d'éléments.
+  \item Affichage de la matrice et du plateau
+
+\end{itemize}
+
+\begin{center}
+\begin{verbatim}
+procedure affichage(F: fichier_de_coups)
+    debut
+       etatMatrice<-créeMatrice(9,9,element)
+       ligne<-lecture(F)
+           tant que (nonVide(ligne))
+                traduire(ligne,etatMatrice)
+                affiche(etatMatrice)
+                ligne<-lecture(F)   
+    fin
+\end{verbatim}
+\end{center}
+
+
+\section{Les stratégies}
+\subsection{aléatoire}
+
+La création de la stratégie aléatoire fut relativement simple étant donnée que celle si ne fait pas appel à des prises de décisions réfléchis, tout est aléatoire. Elle nous a cependant
+permis de tester et valider une partie des fonctions réalisées dans ce projet (notamment les fonctions de déplacement de pion (\verb?place_wall?) et de positionnement d'un mur (\verb?place_wall?).
+
+
+\section{Critiques}
+\subsection{Notre Affichage}
+Même si l'utilisation de la bibliothèque ncurses nous à permis de créer un affichage plus agréable,
+il reste des points améliorables. Premierement il manque des couleurs, nous aurions aussi pu ajouter l'affichage des murs restants de chaque joueurs.
+\subsection{Notre serveur}
+
+La plupart des fonctions demandées pour l'implémentation du serveur ont put être réalisées, cependant la fonction la plus complexe n'as pas pu être validée.
+En effet même si l'algorithme peu sembler bon, les cas terminaux n'ont pas été suffisemment bien définis et établis, ce qui à fait que lors de l'écriture en code C de 
+la fonction nous nous sommes retrouvés face à plusieurs problèmes qui varient et qui persistent encore :  
+\begin{itemize}
+  \item la vérification ne termine pas.
+  \item La fonction effectue parfois des vérifications en dehors de la grille ce qui provoque une erreur de segmentation.
+  \item La fonction retourne que le le plateau est toujours valide même dans des cas où il ne l'est pas. 
+  \end{itemize}
+La stratégie aléatoire a révélé des problèmes dans nos vérifications de mouvement, en effet certains mur sont traversés.
+
+\subsection{Retour sur le travail réalisé}
+Nous avons mis beaucoup de temps à nous mettre d'accord sur la façon dont il fallait représenter les éléments du jeu : 
+Fallait-il séparer la grille qui contenait l'emplacement des pions et la grille contenant les murs ?
+Il y avait plusieurs possibilités pour enregistrer la position des murs, laquelle est la plus simple ? 
+Nous avons aussi eu du mal à commencer rapidement le projet
+à cause de certains désaccords sur la compréhension des consignes et directives données.
+
+Un autre problème fut la répartition des tâches à effectuer, nous avons réussi à séparer quelques tâches, cependant il arrivait parfois que deux personnes aient effectué le même travail.
+
+\end{document}
