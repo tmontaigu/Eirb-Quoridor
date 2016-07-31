@@ -2,66 +2,58 @@
 #include <stdlib.h>
 #include <math.h>
 
+#ifdef __unix__
+	#include <unistd.h>
+	#define clear_console() system("clear");
+#elif defined _WIN32
+	#include <windows.h>
+	#define sleep(x) Sleep(1000 * x)
+	#define clear_console() system("cls");
+#endif
+
 #include "./headers/structQuoridor.h"
-
-
-
-
-
-
-
-
-
-
-
-
 
  int main(int argc, char **argv)
  {
 
-   FILE *Coups;
-   init_board(bglobal);//Initialisation du plateau
-   affiche_board(bglobal);
-   Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
-   fclose(Coups);
+	FILE *Coups;
+	init_board(bglobal);//Initialisation du plateau
+	affiche_board(bglobal);
+	Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
+	fclose(Coups);
 
+	int numberOfTurn = 0;
+	
+	while (gagnant(bglobal))
+	{
+		Board.action=1;
+		Board.joueur=1;
 
- while (gagnant(bglobal))
-{
-  Board.action=1;
-  Board.joueur=1;
+		while (Board.action==1)
+		{
+			random__play(bglobal); 
+		}
+		
+		sleep(3);
+		clear_console();
+		printf("Noir Tour %d:\n",numberOfTurn);   
+		affiche_board(bglobal);
+		
+		Board.joueur=0;
+		Board.action=1;
 
-  while (Board.action==1)
-    {
- 
-      random__play(bglobal);
-      
-    }
-   for (int i=0;i<5000; i++){for (int j=0; j < 50000; j++){}}  //boucle pour bloquer le precessus
+		while (Board.action==1)
+		{
+			random__play(bglobal);     
+		}
 
-  system("clear");
-  printf("Noir :");   
-  affiche_board(bglobal);
+		clear_console();
 
-  Board.joueur=0 ;
-  Board.action=1;
-  
-  while (Board.action==1)
-    {
-  
-      random__play(bglobal);   
-      
-    }
+		printf("Blanc Tour %d:\n",numberOfTurn);
+		affiche_board(bglobal);
 
-  system("clear");
-  printf("Blanc :");
-  affiche_board(bglobal);
-
-  for (int i=0;i<5000; i++){for (int j=0; j < 50000; j++){}}
-  
-  
-}
- 
- 
- return 0;
+		sleep(3);
+		numberOfTurn++;
+	}
+	return 0;
 }
