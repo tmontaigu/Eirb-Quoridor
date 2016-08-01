@@ -49,4 +49,5 @@ void random__play(const struct board *bglobal);
 int gagnant(const struct board *bglobal);
 int ecrit (char colonne, char ligne, char direction, int currentPlayer);
 unsigned int remaining_bridges(const struct board* bglobal, unsigned int player);
+int distance_between(int a, int b);
 

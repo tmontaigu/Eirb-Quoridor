@@ -30,10 +30,10 @@ int ecrit (char colonne, char ligne, char direction, int currentPlayer)
     {
         case 0:
             fprintf(Coups,"h ");
-            break;
+			break;
         case 1:
             fprintf(Coups,"v ");
-            break;
+			break;
         default:
 	  if (currentPlayer==1)
 	    {
@@ -127,7 +127,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 	if (bglobal->joueur==1)
 	{
 		//cas mouvement normal
-		if (( (abs(colonne-bglobal->colonnePionNoir)==1) && (abs(ligne-bglobal->lignePionNoir)==1)) ==0 )
+		if ( (distance_between(colonne,bglobal->colonnePionNoir)==1 && distance_between(ligne,bglobal->lignePionNoir)==1) ==0 )
 		{
 			if(colonne==Board.colonnePionNoir)
 			{
@@ -145,12 +145,12 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 				isMoveValid=0;
 		}
 		//cas saut de pion
-		if ( (abs(colonne-bglobal->colonnePionNoir)==2) || (abs(ligne-bglobal->lignePionNoir)==2) )
+		if ( distance_between(colonne,bglobal->colonnePionNoir)==2 || distance_between(ligne,bglobal->lignePionNoir==2) )
 		{
-			if ( (abs(colonne-bglobal->colonnePionNoir)==0) || (abs(ligne-bglobal->lignePionNoir)==0) )
+			if ( distance_between(colonne,bglobal->colonnePionNoir)==0 || distance_between(ligne,bglobal->lignePionNoir)==0) 
 			{
 				//cas mouvement en ligne
-				if  (abs(colonne-bglobal->colonnePionNoir)==2)
+				if (distance_between(colonne,bglobal->colonnePionNoir)==2)
 				{
 					// cas vers la gauche
 					if ( ((colonne-bglobal->colonnePionNoir)>0) &&  (Board.grille[ligne][(colonne + bglobal->colonnePionNoir)/2].pion==1 &&  (Board.grille[ligne][bglobal->colonnePionNoir].murDroite==0 )) )
@@ -180,7 +180,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
    //test pion blanc
 	if (bglobal->joueur==0)
 	{
-		if ((abs(colonne-bglobal->colonnePionBlanc) && abs(ligne-bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
+		if ((distance_between(colonne,bglobal->colonnePionBlanc) && distance_between(ligne,bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
 		{
 			if(colonne==Board.colonnePionBlanc)
 			{
@@ -276,5 +276,8 @@ void affiche_board(const struct board *bglobal)
 	}
 }
 
+int distance_between(int a, int b) {
+	return abs( a - b );
+}
 
 
