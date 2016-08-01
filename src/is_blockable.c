@@ -10,11 +10,11 @@ void voisins(struct board testBoard, char colonne, char ligne,int player);
 /*********************************************************************
 
  * Directions are either 0 (horizontal) or 1 (vertical).
-
+ * TODO Actually test if the wall can block the pawn
  *********************************************************************/
 int is_blockable(const struct board* b, char column, char line, char direction)
 {
-    struct board testBoard=Board;
+    struct board testBoard=*b;
 
 	int Ligne = line - '1';
 	int Colonne = column - 'a';
@@ -40,7 +40,7 @@ int is_winning ( struct board testBoard, int colonne, int ligne, int player)
 {
 	int winning;
 
-	if (player==1)//noir donc doit arrriver en haut (ligne 0)
+	if (player == black)//noir donc doit arrriver en haut (ligne 0)
 	{
 		if (ligne==0)
 	{
@@ -50,7 +50,7 @@ int is_winning ( struct board testBoard, int colonne, int ligne, int player)
 		winning=0;
 	}
 
-	else if(player==0)
+	else if(player == white)
 	{
 	if (ligne==8)
 		winning=1;
@@ -67,9 +67,6 @@ int is_winning ( struct board testBoard, int colonne, int ligne, int player)
     {
 		voisins( testBoard, colonne, ligne, player);
     }
-
-
-
 }
 
 /**********************************************************

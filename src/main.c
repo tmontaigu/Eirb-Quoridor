@@ -18,6 +18,7 @@
 
 	FILE *Coups;
 	init_board(bglobal);//Initialisation du plateau
+	clear_console();
 	affiche_board(bglobal);
 	Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
 	fclose(Coups);
@@ -26,8 +27,8 @@
 	
 	while (gagnant(bglobal))
 	{
-		Board.action=1;
-		Board.joueur=1;
+		Board.action = 1;
+		Board.joueur = black;
 
 		while (Board.action==1)
 		{
@@ -39,8 +40,8 @@
 		printf("Noir Tour %d:\n",numberOfTurn);   
 		affiche_board(bglobal);
 		
-		Board.joueur=0;
-		Board.action=1;
+		Board.joueur = white;
+		Board.action = 1;
 
 		while (Board.action==1)
 		{

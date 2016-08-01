@@ -70,10 +70,9 @@ void init_board (const struct board *bglobal)
 
 	for ( int i=0; i<9; i++)
 	{
-
 		for (int j=0; j<9; j++)
 		{
-			Board.grille[i][j].pion = -1;
+			Board.grille[i][j].pion = none;
 			Board.grille[i][j].murDroite = 0;
 			Board.grille[i][j].murBas = 0;
 			Board.grille[i][j].origineMur = 0;
@@ -81,8 +80,8 @@ void init_board (const struct board *bglobal)
 	}
 
 	//ensuite on rajoute les 2 pions a leur départ respectif
-	Board.grille[0][4].pion = 0;
-	Board.grille[8][4].pion = 1;
+	Board.grille[0][4].pion = white;
+	Board.grille[8][4].pion = black;
 
 
 	Board.lignePionBlanc=0;
@@ -112,11 +111,11 @@ void init_board (const struct board *bglobal)
 int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 {
 	int isMoveValid;
-	if (bglobal->joueur==1 && Board.grille[ligne][colonne].pion==0)
+	if (current_player_is(black) && pawn_at(ligne,colonne) == white)
 	{
 		isMoveValid=0;
 	}
-	else if (bglobal->joueur==0 && Board.grille[ligne][colonne].pion==1)
+	else if (current_player_is(white) && pawn_at(ligne,colonne)== black)
 	{
 		isMoveValid=0;
 	}
@@ -124,7 +123,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
    
 
 	//test pion noir
-	if (bglobal->joueur==1)
+	if (current_player_is(black))
 	{
 		//cas mouvement normal
 		if ( (distance_between(colonne,bglobal->colonnePionNoir)==1 && distance_between(ligne,bglobal->lignePionNoir)==1) ==0 )
@@ -150,7 +149,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 			if ( distance_between(colonne,bglobal->colonnePionNoir)==0 || distance_between(ligne,bglobal->lignePionNoir)==0) 
 			{
 				//cas mouvement en ligne
-				if (distance_between(colonne,bglobal->colonnePionNoir)==2)
+				if (distance_between(colonne,bglobal->colonnePionNoir) == 2)
 				{
 					// cas vers la gauche
 					if ( ((colonne-bglobal->colonnePionNoir)>0) &&  (Board.grille[ligne][(colonne + bglobal->colonnePionNoir)/2].pion==1 &&  (Board.grille[ligne][bglobal->colonnePionNoir].murDroite==0 )) )
@@ -162,7 +161,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 						isMoveValid=0;
 				}
 				//cas mouvement en colonne
-				if  (abs(ligne-bglobal->lignePionNoir)==2)
+				if  (distance_between(ligne,bglobal->lignePionNoir) == 2)
 				{
 					// cas vers le haut
 					if ( ((ligne-bglobal->lignePionNoir)<0) &&  (Board.grille[ligne+1][colonne].pion==1) &&  (Board.grille[ligne][colonne].murBas==0 ))
@@ -178,7 +177,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 	}
 
    //test pion blanc
-	if (bglobal->joueur==0)
+	if (current_player_is(white))
 	{
 		if ((distance_between(colonne,bglobal->colonnePionBlanc) && distance_between(ligne,bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
 		{
@@ -239,40 +238,36 @@ void affiche_board(const struct board *bglobal)
 	{
 		printf(" %d ",i+1);
 
+		for(j=0; j<COLONNES; j++)
+		{
+			//affichage des pions
+			printf(" ");
 
-	for(j=0; j<COLONNES; j++)
-	{
-		//affichage des pions
-		printf(" ");
+		if (Board.grille[i][j].pion==-1) 
+			printf(".");
+		else if (Board.grille[i][j].pion==0) 
+			printf("O");
+		else if (Board.grille[i][j].pion==1) 
+			printf("X");
+			//affichage des murs verticaux
+		if (Board.grille[i][j].murDroite==0) 
+			printf(" ");
+		else if (Board.grille[i][j].murDroite==1) 
+			printf("|");
 
-	if (Board.grille[i][j].pion==-1) 
-		printf(".");
-	else if (Board.grille[i][j].pion==0) 
-		printf("O");
-	else if (Board.grille[i][j].pion==1) 
-		printf("X");
-		//affichage des murs verticaux
-	if (Board.grille[i][j].murDroite==0) 
-		printf(" ");
-	else if (Board.grille[i][j].murDroite==1) 
-		printf("|");
+		}
 
-	}
-
-	printf("\n");
-
-
-	//affichage des murs horizontaux
-	for (j = 0; j < COLONNES; j++)
-	{
-	if (Board.grille[i][j].murBas==1) 
-		printf(" _ ");
-	else if (Board.grille[i][j].murBas==0) 
-		printf("   "); //3 espaces pour que ça soit bien aligné
-	}
-
-	printf("\n");
-
+		printf("\n");
+		
+		//affichage des murs horizontaux
+		for (j = 0; j < COLONNES; j++)
+		{
+			if (Board.grille[i][j].murBas==1) 
+				printf(" _ ");
+			else if (Board.grille[i][j].murBas==0) 
+				printf("   "); //3 espaces pour que ça soit bien aligné
+		}
+			printf("\n");
 	}
 }
 
@@ -280,4 +275,10 @@ int distance_between(int a, int b) {
 	return abs( a - b );
 }
 
+int current_player_is(int playerColor) {
+	return bglobal->joueur == playerColor;
+}
 
+int pawn_at(int line, int column) {
+	return bglobal->grille[line][column].pion;
+}

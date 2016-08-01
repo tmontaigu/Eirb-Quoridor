@@ -79,16 +79,6 @@ void random_play(struct board *b)
     fclose(rstrat);
 }
 
-int gagnant(struct board *b)//cas critique (-1)
-{
- if (b->posiPion[BLANC][1]==0) 
- 	return(BLANC);
- 
- else if (b->posiPion[NOIR][1]==8) 
- 	return(NOIR);
- else 
- 	return(-1);
- 
-}
+
 
 
