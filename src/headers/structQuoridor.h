@@ -38,6 +38,13 @@ enum player {
 	none = -1
 };
 
+enum directions {
+    left = 0,
+    down = 1,
+    right = 2,
+    up = 3
+};
+
 struct board Board;
 
 extern const struct board *bglobal;
@@ -47,7 +54,7 @@ extern const struct board *bglobal;
 
 void move_pawn(const struct board *b, char colonne, char ligne);
 unsigned int get_current_player(const struct board * bgblobal);
-void affiche_board(const struct board *bglobal);
+void display_board(const struct board *bglobal);
 void init_board ( const struct board *bglobal);
 int is_move_valid(const struct board *bglobal, int colonne, int ligne);
 void random__play(const struct board *bglobal);

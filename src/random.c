@@ -101,16 +101,16 @@ void rand_pawn(struct position MyPosition)
 			move_pawn(bglobal, MyPosition.colonne+1, MyPosition.ligne);
 		break;
 		case 3:
-			if (MyPosition.imPlayer=1)
-				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne+1);
-			else if (MyPosition.imPlayer=0)
-				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne-1);
+//			if (MyPosition.imPlayer=1)
+			move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne+1);
+//			else if (MyPosition.imPlayer=0)
+//				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne-1);
 		break;
 		case 1:
-			if (MyPosition.imPlayer=1)
+//			if (MyPosition.imPlayer=1)
 				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne-1);
-			else if (MyPosition.imPlayer=0)
-				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne+1);
+//			else if (MyPosition.imPlayer=0)
+//				move_pawn(bglobal, MyPosition.colonne, MyPosition.ligne+1);
 		break;
 		}
 }

@@ -28,7 +28,7 @@ unsigned int get_current_player(const struct board * bgblobal)
 
 
 * Direction  towards smaller cols (0), smaller lines (1), larger cols (2) or larger lines (3).
-* 0=gauche, 2 = Droite , 1 = haut , 3 = bas
+* 0=gauche, 2 = Droite ,3 = haut , 1 = bas
 
 * remplacer int par char
 *********************************************************************/
@@ -49,7 +49,7 @@ int is_passable (struct board Board, char colonne, char ligne, int direction)
 		  else presenceMur =0;
 		break;
 
-		case 3 :
+		case 1 :
 		  if (Board.grille[Ligne][Colonne].murBas==1) presenceMur=1;
 		  else presenceMur =0;
 		break;
@@ -59,12 +59,11 @@ int is_passable (struct board Board, char colonne, char ligne, int direction)
 		  else presenceMur=0;
 		break;
 
-		case 1:
+		case 3:
 			if(Board.grille[Ligne+1][Colonne].murBas==1) presenceMur=1;
 			else presenceMur=0;
 		break;
 	}
-    //printf("from [%d,%d] dir: %d is_passable = %d\n", colonne, ligne, direction, presenceMur);
 	return !presenceMur;
 }
 

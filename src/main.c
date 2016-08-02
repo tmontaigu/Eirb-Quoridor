@@ -19,7 +19,7 @@
 	FILE *Coups;
 	init_board(bglobal);//Initialisation du plateau
 	clear_console();
-	affiche_board(bglobal);
+	display_board(bglobal);
 	Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
 	fclose(Coups);
 
@@ -38,7 +38,7 @@
 		sleep(3);
 		clear_console();
 		printf("Noir Tour %d:\n",numberOfTurn);   
-		affiche_board(bglobal);
+		display_board(bglobal);
 		
 		Board.joueur = white;
 		Board.action = 1;
@@ -51,7 +51,7 @@
 		clear_console();
 
 		printf("Blanc Tour %d:\n",numberOfTurn);
-		affiche_board(bglobal);
+		display_board(bglobal);
 
 		sleep(3);
 		numberOfTurn++;

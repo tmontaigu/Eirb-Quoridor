@@ -239,7 +239,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
  * Simple fonction qui affiche la le jeu dans un terminal
 
  **********************************************************/
-void affiche_board(const struct board *bglobal)
+void display_board(const struct board *bglobal)
 {
 	int i,j;
 
