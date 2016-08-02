@@ -53,12 +53,20 @@ int ecrit (char colonne, char ligne, char direction, int currentPlayer)
 /*********************************************************************************/
 int gagnant(const struct board *bglobal)
 {
-  if ( Board.lignePionNoir==0 || Board.lignePionBlanc==8)
-  {
-    return 0;
-  }
- 
-  else return 1;
+    if ( Board.lignePionNoir == 0)
+    {
+        printf("Pion Noir Gagne\n");
+        return 0;
+    }
+    else if ( Board.lignePionBlanc == 8)
+    { 
+        printf("Pion Blanc Gagne\n");
+        return 0;
+    }
+
+    else
+        return 1;
+
 }
 
 
@@ -110,14 +118,15 @@ void init_board (const struct board *bglobal)
 **********************************************************/
 int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 {
-	int isMoveValid;
+	int isMoveValid = 0;
+    //Opponent is already on the destination
 	if (current_player_is(black) && pawn_at(ligne,colonne) == white)
 	{
-		isMoveValid=0;
+        return 0;
 	}
 	else if (current_player_is(white) && pawn_at(ligne,colonne)== black)
 	{
-		isMoveValid=0;
+        return 0;
 	}
 
    
@@ -126,18 +135,23 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 	if (current_player_is(black))
 	{
 		//cas mouvement normal
+        //xor
 		if ( (distance_between(colonne,bglobal->colonnePionNoir)==1 && distance_between(ligne,bglobal->lignePionNoir)==1) ==0 )
 		{
 			if(colonne==Board.colonnePionNoir)
 			{
-				if (ligne==Board.lignePionNoir+1 || ligne==Board.lignePionNoir-1)
+				if (ligne==Board.lignePionNoir+1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,1))
 					isMoveValid=1;
+                else if (ligne==Board.lignePionNoir-1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,3))
+                    isMoveValid = 1;
 			}
 
 			else if(ligne==Board.lignePionNoir)
 			{
-				if (colonne==Board.colonnePionNoir+1 || colonne==Board.colonnePionNoir-1)
+				if (colonne==Board.colonnePionNoir+1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,2))
 					isMoveValid=1;
+                else if (colonne==Board.colonnePionNoir-1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,0))
+                    isMoveValid = 1;
 			}
 
 			else
@@ -181,16 +195,20 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 	{
 		if ((distance_between(colonne,bglobal->colonnePionBlanc) && distance_between(ligne,bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
 		{
-			if(colonne==Board.colonnePionBlanc)
+            if(colonne==Board.colonnePionBlanc)
 			{
-				if (ligne==Board.lignePionBlanc+1 || ligne==Board.lignePionBlanc-1)
+				if (ligne==Board.lignePionBlanc+1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,1))
 					isMoveValid=1;
+                else if (ligne==Board.lignePionBlanc-1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,3))
+                    isMoveValid = 1;
 			}
 
 			else if(ligne==Board.lignePionBlanc)
 			{
-				if (colonne==Board.colonnePionBlanc+1 || colonne==Board.colonnePionBlanc-1)
+				if (colonne==Board.colonnePionBlanc+1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,2))
 					isMoveValid=1;
+                else if (colonne==Board.colonnePionBlanc-1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,0))
+                    isMoveValid = 1;
 			}
 			else
 				isMoveValid=0;
@@ -276,7 +294,11 @@ int distance_between(int a, int b) {
 }
 
 int current_player_is(int playerColor) {
-	return bglobal->joueur == playerColor;
+	return current_player() == playerColor;
+}
+
+int current_player() {
+    return bglobal->joueur;
 }
 
 int pawn_at(int line, int column) {

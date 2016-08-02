@@ -56,5 +56,6 @@ int ecrit (char colonne, char ligne, char direction, int currentPlayer);
 unsigned int remaining_bridges(const struct board* bglobal, unsigned int player);
 int distance_between(int a, int b);
 int current_player_is(int playerColor);
+int current_player();
 int pawn_at(int line, int column);
 

@@ -28,7 +28,7 @@ unsigned int get_current_player(const struct board * bgblobal)
 
 
 * Direction  towards smaller cols (0), smaller lines (1), larger cols (2) or larger lines (3).
-* 0=gauche, 2 = Droite , 1 = haut , 4 = bas
+* 0=gauche, 2 = Droite , 1 = haut , 3 = bas
 
 * remplacer int par char
 *********************************************************************/
@@ -49,7 +49,7 @@ int is_passable (struct board Board, char colonne, char ligne, int direction)
 		  else presenceMur =0;
 		break;
 
-		case 4 :
+		case 3 :
 		  if (Board.grille[Ligne][Colonne].murBas==1) presenceMur=1;
 		  else presenceMur =0;
 		break;
@@ -64,7 +64,8 @@ int is_passable (struct board Board, char colonne, char ligne, int direction)
 			else presenceMur=0;
 		break;
 	}
-	return presenceMur;
+    //printf("from [%d,%d] dir: %d is_passable = %d\n", colonne, ligne, direction, presenceMur);
+	return !presenceMur;
 }
 
 
@@ -77,39 +78,34 @@ int is_passable (struct board Board, char colonne, char ligne, int direction)
 /************************************************************
 
  * Fonction qui bouge le pion a la position donnee
- * A ajouter : appelle a is_passable
- * A ajouter : verifier que le mouvement est autorisé 
- * (genre on se déplace pas de 5 cases d'un coups)
- * A ajouter : le fait que sur l'affichage les cases vont de 1 a 9
- * et dans le prog ells vont de 0 a 8
-
+ * Si le mouvement est valide
  ***********************************************************/
 void move_pawn(const struct board *b, char colonne, char ligne)
 {
 	int Colonne = colonne-'a';
-	int Ligne = ligne - '1'; //a verifier si ça marche
+	int Ligne = ligne - '1'; 
 	int validMove;
 	int moveDone;
 
 
-	int currentPlayer= b->joueur;
+	int currentPlayer = b->joueur;
 
 	validMove=is_move_valid(b, Colonne, Ligne);
 
 	if (validMove==1)
 	{
-		if (currentPlayer==0)
+		if (current_player_is(white))
 		{
-			Board.grille[Board.lignePionBlanc][Board.colonnePionBlanc].pion=-1;
-			Board.grille[Ligne][Colonne].pion=0;
+			Board.grille[Board.lignePionBlanc][Board.colonnePionBlanc].pion = none;
+			Board.grille[Ligne][Colonne].pion = white;
 			Board.lignePionBlanc=Ligne;
 			Board.colonnePionBlanc=Colonne;
 			moveDone=1;
 		}
-		else if ( currentPlayer==1)
+		else if (current_player_is(black))
 		{
-			Board.grille[Board.lignePionNoir][Board.colonnePionNoir].pion=-1;
-			Board.grille[Ligne][Colonne].pion=1;
+			Board.grille[Board.lignePionNoir][Board.colonnePionNoir].pion = none ;
+			Board.grille[Ligne][Colonne].pion = black;
 			Board.lignePionNoir=Ligne;
 			Board.colonnePionNoir=Colonne;
 			moveDone=1;
