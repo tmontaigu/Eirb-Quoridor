@@ -68,3 +68,4 @@ int current_player_is(int playerColor);
 int current_player();
 int pawn_at(int line, int column);
 int determine_direction(int srcColumn, int srcLine, int dstColumn, int dstLine);
+int is_reachable (const struct board Board, char colonne, char ligne, int direction);

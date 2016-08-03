@@ -26,46 +26,53 @@ int main(int argc, char **argv) {
     myBoard.colonnePionNoir = 1;
     myBoard.lignePionNoir = 1;
     
+    for (int i = 0; i < 9; i++) {
+		for (int j = 0; j < 9; j++) {
+			myBoard.grille[i][j].pion = none;
+		}
+	}
+    
     bglobal = &myBoard;
 
     int valid = 666;
-    valid = is_reachable(myBoard,4,0); assert(valid == 0);
-    valid = is_reachable(myBoard,1,2); assert(valid == 0);
-    valid = is_reachable(myBoard,0,1); assert(valid == 0);
-    valid = is_reachable(myBoard,2,1); assert(valid == 0);
+    valid = is_move_valid(bglobal,1,0); assert(valid == 0); //up
+    valid = is_move_valid(bglobal,1,2); assert(valid == 0); //down
+    valid = is_move_valid(bglobal,0,1); assert(valid == 0); //left
+    valid = is_move_valid(bglobal,2,1); assert(valid == 0); //right
     
-    printf("1/4 OK \n");
-   /* 
+    printf("1/5 OK \n");
+    
     myBoard.grille[0][1].murBas = 0; // Can now go up
-    reachable = is_reachable(myBoard,1,1,left); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,down); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,right); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,up); assert(reachable == 1);
+    valid = is_move_valid(bglobal,1,0); assert(valid == 1);
+    valid = is_move_valid(bglobal,1,2); assert(valid == 0);
+    valid = is_move_valid(bglobal,0,1); assert(valid == 0);
+    valid = is_move_valid(bglobal,2,1); assert(valid == 0);
 
-    printf("2/4 OK \n");
+    printf("2/5 OK \n");
 
     myBoard.grille[1][1].murDroite = 0; // Can now also go right
-    reachable = is_reachable(myBoard,1,1,left); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,down); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,right); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,up); assert(reachable == 1);
+    valid = is_move_valid(bglobal,1,0); assert(valid == 1);
+    valid = is_move_valid(bglobal,1,2); assert(valid == 0);
+    valid = is_move_valid(bglobal,0,1); assert(valid == 0);
+    valid = is_move_valid(bglobal,2,1); assert(valid == 1);
 
-    printf("3/4 OK \n");
+    printf("3/5 OK \n");
 
     myBoard.grille[1][1].murBas = 0; // Can now also go down
-    reachable = is_reachable(myBoard,1,1,left); assert(reachable == 0);
-    reachable = is_reachable(myBoard,1,1,down); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,right); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,up); assert(reachable == 1);
+    valid = is_move_valid(bglobal,1,0); assert(valid == 1);
+    valid = is_move_valid(bglobal,1,2); assert(valid == 1);
+    valid = is_move_valid(bglobal,0,1); assert(valid == 0);
+    valid = is_move_valid(bglobal,2,1); assert(valid == 1);
 
-    printf("4/4 OK \n");
-    
+    printf("4/5 OK \n");
+
     myBoard.grille[1][0].murDroite = 0; //can now alo go left
-    reachable = is_reachable(myBoard,1,1,left); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,down); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,right); assert(reachable == 1);
-    reachable = is_reachable(myBoard,1,1,up); assert(reachable == 1);
-*/
+    valid = is_move_valid(bglobal,1,0); assert(valid == 1);
+    valid = is_move_valid(bglobal,1,2); assert(valid == 1);
+    valid = is_move_valid(bglobal,0,1); assert(valid == 1);
+    valid = is_move_valid(bglobal,2,1); assert(valid == 1);
+    
+    printf("5/5 OK \n");
 
     printf("All tests passed !\n");
 }

@@ -16,6 +16,9 @@ int main(int argc, char **argv) {
      */ 
     struct board myBoard;
     printf("Begining tests of is_reachable...\n");
+    
+
+	
 
     myBoard.grille[0][1].murBas = 1;
     myBoard.grille[1][1].murDroite = 1;

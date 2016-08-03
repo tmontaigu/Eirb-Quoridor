@@ -3,7 +3,6 @@
 #include <string.h>
 
 #include "./headers/structQuoridor.h"
-int is_reachable (struct board Board, char colonne, char ligne, int direction);
 int is_winning ( struct board testBoard, int colonne, int ligne, int player);
 void voisins(struct board testBoard, char colonne, char ligne,int player);
 

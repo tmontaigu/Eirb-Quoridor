@@ -127,9 +127,8 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
         return 0;
 	else if (current_player_is(white) && pawn_at(ligne,colonne) == black)
         return 0;
-
-   int direction  =  invalid;
-
+	
+	int direction  =  invalid;
 	if (current_player_is(black))
     {
         direction = determine_direction(bglobal->colonnePionNoir, bglobal->lignePionNoir, colonne, ligne);
@@ -137,7 +136,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
         if (direction == invalid)
             isMoveValid = invalid;
         else
-            isMoveValid = is_reachable(bglobal, bglobal->colonnePionNoir, bglobal->lignePionNoir, direction);
+            isMoveValid = is_reachable(*bglobal, bglobal->colonnePionNoir, bglobal->lignePionNoir, direction);
 	}
 
 	if (current_player_is(white))
@@ -147,7 +146,7 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
         if (direction == invalid)
             isMoveValid = invalid;
         else
-            isMoveValid = is_reachable(bglobal, bglobal->colonnePionBlanc, bglobal->lignePionBlanc, direction);
+            isMoveValid = is_reachable(*bglobal, bglobal->colonnePionBlanc, bglobal->lignePionBlanc, direction);
 	}
 	
 	//test si le pion va pas se deplacer hors de du board

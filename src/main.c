@@ -35,7 +35,7 @@
 		{
 			random__play(bglobal); 
 		}
-		
+				
 		sleep(3);
 		clear_console();
 		printf("Noir Tour %d:\n",numberOfTurn);   
@@ -44,10 +44,12 @@
 		Board.joueur = white;
 		Board.action = 1;
 
+
 		while (Board.action==1)
 		{
 			random__play(bglobal);     
 		}
+
 
 		clear_console();
 
