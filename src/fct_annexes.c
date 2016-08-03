@@ -140,17 +140,17 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 		{
 			if(colonne==Board.colonnePionNoir)
 			{
-				if (ligne==Board.lignePionNoir+1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,1))
+				if (ligne==Board.lignePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,1))
 					isMoveValid=1;
-                else if (ligne==Board.lignePionNoir-1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,3))
+                else if (ligne==Board.lignePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,3))
                     isMoveValid = 1;
 			}
 
 			else if(ligne==Board.lignePionNoir)
 			{
-				if (colonne==Board.colonnePionNoir+1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,2))
+				if (colonne==Board.colonnePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,2))
 					isMoveValid=1;
-                else if (colonne==Board.colonnePionNoir-1 && is_passable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,0))
+                else if (colonne==Board.colonnePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,0))
                     isMoveValid = 1;
 			}
 
@@ -197,17 +197,17 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 		{
             if(colonne==Board.colonnePionBlanc)
 			{
-				if (ligne==Board.lignePionBlanc+1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,1))
+				if (ligne==Board.lignePionBlanc+1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,1))
 					isMoveValid=1;
-                else if (ligne==Board.lignePionBlanc-1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,3))
+                else if (ligne==Board.lignePionBlanc-1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,3))
                     isMoveValid = 1;
 			}
 
 			else if(ligne==Board.lignePionBlanc)
 			{
-				if (colonne==Board.colonnePionBlanc+1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,2))
+				if (colonne==Board.colonnePionBlanc+1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,2))
 					isMoveValid=1;
-                else if (colonne==Board.colonnePionBlanc-1 && is_passable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,0))
+                else if (colonne==Board.colonnePionBlanc-1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,0))
                     isMoveValid = 1;
 			}
 			else

@@ -17,10 +17,6 @@ unsigned int get_current_player(const struct board * bgblobal)
 	return current_player;
 }
 
-
-
-
-
 /*********************************************************************
 
  * Fonction qui indique si il ya  un mur en partant de la case donnée
@@ -32,15 +28,13 @@ unsigned int get_current_player(const struct board * bgblobal)
 
 * remplacer int par char
 *********************************************************************/
-int is_passable (struct board Board, char colonne, char ligne, int direction)
+int is_reachable (struct board Board, char colonne, char ligne, int direction)
 {
 	int presenceMur=0;
 
 	int Ligne = ligne -'1';
 	int Colonne = colonne - 'a';
 	int Direction = direction - '0';
-
-	struct board caseArrive;
 
 	switch (Direction)
 	{
@@ -86,8 +80,6 @@ void move_pawn(const struct board *b, char colonne, char ligne)
 	int validMove;
 	int moveDone;
 
-
-	int currentPlayer = b->joueur;
 
 	validMove=is_move_valid(b, Colonne, Ligne);
 
