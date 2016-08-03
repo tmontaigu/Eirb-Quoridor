@@ -27,12 +27,18 @@ FILES_Test_is_reachable = serveur.c \
 						  test_is_reachable.c \
 						  fct_annexes.c
 
+FILES_Test_is_move_valid = serveur.c \
+						  test_is_move_valid.c \
+						  fct_annexes.c
+
+
 #------------------------------------------------------------------------------
 # List of objects used to generate the executables
 #------------------------------------------------------------------------------
 OBJS_Quoridor = $(FILES_Quoridor:.c=.o)
 OBJS_Display = $(FILES_Display:.c=.o)
 OBJS_Test_is_reachable = $(FILES_Test_is_reachable:.c=.o)
+OBJS_Test_is_move_valid = $(FILES_Test_is_move_valid:.c=.o)
 #------------------------------------------------------------------------------
 # Line to compile the executable file
 #------------------------------------------------------------------------------
@@ -53,6 +59,10 @@ Affichage: $(patsubst %, obj/%,$(OBJS_Display))
 Test_is_reachable: $(patsubst %, obj/%,$(OBJS_Test_is_reachable))
 	$(COMPILE_EXECUTABLE)
 	@echo Success!
+
+
+Test_is_move_valid: $(patsubst %, obj/%,$(OBJS_Test_is_move_valid))
+	$(COMPILE_EXECUTABLE)
 
 
 

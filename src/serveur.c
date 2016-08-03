@@ -31,7 +31,8 @@ unsigned int get_current_player(const struct board * bgblobal)
 int is_reachable (struct board Board, char colonne, char ligne, int direction)
 {
 	int presenceMur=0;
-
+    
+    printf("direction: %d\n",direction);
 	switch (direction)
 	{
 		case right:
@@ -43,6 +44,7 @@ int is_reachable (struct board Board, char colonne, char ligne, int direction)
 		break;
 
 		case left:
+            printf("wall? [%d][%d] = %d\n", ligne, colonne-1, Board.grille[ligne][colonne-1].murDroite==1);
 		  if (Board.grille[ligne][colonne-1].murDroite==1) presenceMur=1;
 		break;
 
