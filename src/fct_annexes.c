@@ -112,8 +112,11 @@ void init_board (const struct board *bglobal)
 /*********************************************************
 
  * Fonction qui verifie si le déplacement du pion est
- autorise (qu'il ne se déplace pas de plus de 1 case
- ou qu'il n'aille pas en dehors du board
+ * autorise (qu'il ne se déplace pas de plus de 1 case
+ * ou qu'il n'aille pas en dehors du board
+
+ * TODO add the pssibility to jump over an enemy pawn
+ * (see the game rules)
 
 **********************************************************/
 int is_move_valid(const struct board *bglobal, int colonne, int ligne)
@@ -121,104 +124,30 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 	int isMoveValid = 0;
     //Opponent is already on the destination
 	if (current_player_is(black) && pawn_at(ligne,colonne) == white)
-	{
         return 0;
-	}
-	else if (current_player_is(white) && pawn_at(ligne,colonne)== black)
-	{
+	else if (current_player_is(white) && pawn_at(ligne,colonne) == black)
         return 0;
-	}
 
-    
+   int direction  =  invalid;
 
-	//test pion noir
 	if (current_player_is(black))
     {
-        printf("sesdfsdf\n");
-        int direction = determine_direction(bglobal->colonnePionNoir, bglobal->lignePionNoir, colonne, ligne);
-        printf("BLACK Direction is : %d\n ", direction);
-		//cas mouvement normal
-        //xor
-		if ( (distance_between(colonne,bglobal->colonnePionNoir)==1 && distance_between(ligne,bglobal->lignePionNoir)==1) ==0 )
-		{
-			if(colonne==Board.colonnePionNoir)
-			{
-				if (ligne==Board.lignePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,down))
-					isMoveValid=1;
-                else if (ligne==Board.lignePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,up))
-                    isMoveValid = 1;
-			}
+        direction = determine_direction(bglobal->colonnePionNoir, bglobal->lignePionNoir, colonne, ligne);
 
-			else if(ligne==Board.lignePionNoir)
-			{
-				if (colonne==Board.colonnePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,right))
-					isMoveValid=1;
-                else if (colonne==Board.colonnePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,left))
-                    isMoveValid = 1;
-			}
-
-			else
-				isMoveValid=0;
-		}
-		//cas saut de pion
-		if ( distance_between(colonne,bglobal->colonnePionNoir)==2 || distance_between(ligne,bglobal->lignePionNoir==2) )
-		{
-			if ( distance_between(colonne,bglobal->colonnePionNoir)==0 || distance_between(ligne,bglobal->lignePionNoir)==0) 
-			{
-				//cas mouvement en ligne
-				if (distance_between(colonne,bglobal->colonnePionNoir) == 2)
-				{
-					// cas vers la gauche
-					if ( ((colonne-bglobal->colonnePionNoir)>0) &&  (Board.grille[ligne][(colonne + bglobal->colonnePionNoir)/2].pion==1 &&  (Board.grille[ligne][bglobal->colonnePionNoir].murDroite==0 )) )
-						isMoveValid=1;
-					//cas vers la droite
-					else if ( ((colonne-bglobal->colonnePionNoir)<0) &&  (Board.grille[ligne][(colonne + bglobal->colonnePionNoir)/2].pion==1 &&  (Board.grille[ligne][(colonne + bglobal->colonnePionNoir)/2].murDroite==0 )) )
-						isMoveValid=1;
-					else
-						isMoveValid=0;
-				}
-				//cas mouvement en colonne
-				if  (distance_between(ligne,bglobal->lignePionNoir) == 2)
-				{
-					// cas vers le haut
-					if ( ((ligne-bglobal->lignePionNoir)<0) &&  (Board.grille[ligne+1][colonne].pion==1) &&  (Board.grille[ligne][colonne].murBas==0 ))
-						isMoveValid=1;
-					//cas vers le bas
-					else if ( ((ligne-bglobal->lignePionNoir)>0) &&  (Board.grille[ligne-1][colonne].pion==1 &&  (Board.grille[ligne-1][colonne].murBas==0 )) )
-						isMoveValid=1;
-					else
-						isMoveValid=0;
-				}
-			}
-		}
+        if (direction == invalid)
+            isMoveValid = invalid;
+        else
+            isMoveValid = is_reachable(bglobal, bglobal->colonnePionNoir, bglobal->lignePionNoir, direction);
 	}
 
-   //test pion blanc
 	if (current_player_is(white))
 	{
-        int direction = determine_direction(bglobal->colonnePionBlanc, bglobal->lignePionBlanc, colonne, ligne);
-        printf("WHITE Direction is : %d\n ", direction);
-
-		if ((distance_between(colonne,bglobal->colonnePionBlanc) && distance_between(ligne,bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
-		{
-            if(colonne==Board.colonnePionBlanc)
-			{
-				if (ligne==Board.lignePionBlanc+1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,1))
-					isMoveValid=1;
-                else if (ligne==Board.lignePionBlanc-1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,3))
-                    isMoveValid = 1;
-			}
-
-			else if(ligne==Board.lignePionBlanc)
-			{
-				if (colonne==Board.colonnePionBlanc+1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,2))
-					isMoveValid=1;
-                else if (colonne==Board.colonnePionBlanc-1 && is_reachable(*bglobal,bglobal->colonnePionBlanc,bglobal->lignePionBlanc,0))
-                    isMoveValid = 1;
-			}
-			else
-				isMoveValid=0;
-		}
+        direction = determine_direction(bglobal->colonnePionBlanc, bglobal->lignePionBlanc, colonne, ligne);
+        
+        if (direction == invalid)
+            isMoveValid = invalid;
+        else
+            isMoveValid = is_reachable(bglobal, bglobal->colonnePionBlanc, bglobal->lignePionBlanc, direction);
 	}
 	
 	//test si le pion va pas se deplacer hors de du board

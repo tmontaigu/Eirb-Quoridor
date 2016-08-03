@@ -19,6 +19,7 @@
 	FILE *Coups;
 	init_board(bglobal);//Initialisation du plateau
 	clear_console();
+    printf("Starting the game\n");
 	display_board(bglobal);
 	Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
 	fclose(Coups);
