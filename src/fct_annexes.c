@@ -140,17 +140,17 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
 		{
 			if(colonne==Board.colonnePionNoir)
 			{
-				if (ligne==Board.lignePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,1))
+				if (ligne==Board.lignePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,down))
 					isMoveValid=1;
-                else if (ligne==Board.lignePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,3))
+                else if (ligne==Board.lignePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,up))
                     isMoveValid = 1;
 			}
 
 			else if(ligne==Board.lignePionNoir)
 			{
-				if (colonne==Board.colonnePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,2))
+				if (colonne==Board.colonnePionNoir+1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,right))
 					isMoveValid=1;
-                else if (colonne==Board.colonnePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,0))
+                else if (colonne==Board.colonnePionNoir-1 && is_reachable(*bglobal,bglobal->colonnePionNoir,bglobal->lignePionNoir,left))
                     isMoveValid = 1;
 			}
 

@@ -23,11 +23,16 @@ FILES_Quoridor = serveur.c \
 
 FILES_Display = affichage.c
 
+FILES_Test_is_reachable = serveur.c \
+						  test_is_reachable.c \
+						  fct_annexes.c
+
 #------------------------------------------------------------------------------
 # List of objects used to generate the executables
 #------------------------------------------------------------------------------
 OBJS_Quoridor = $(FILES_Quoridor:.c=.o)
 OBJS_Display = $(FILES_Display:.c=.o)
+OBJS_Test_is_reachable = $(FILES_Test_is_reachable:.c=.o)
 #------------------------------------------------------------------------------
 # Line to compile the executable file
 #------------------------------------------------------------------------------
@@ -44,6 +49,11 @@ Quoridor: $(patsubst %, obj/%,$(OBJS_Quoridor))
 Affichage: $(patsubst %, obj/%,$(OBJS_Display))
 	$(COMPILE_EXECUTABLE)
 	@echo Success!
+
+Test_is_reachable: $(patsubst %, obj/%,$(OBJS_Test_is_reachable))
+	$(COMPILE_EXECUTABLE)
+	@echo Success!
+
 
 
 obj/%.o: %.c

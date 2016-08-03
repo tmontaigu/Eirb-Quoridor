@@ -30,6 +30,8 @@ int is_blockable(const struct board* b, char column, char line, char direction)
 		testBoard.grille[Ligne][Colonne].origineMur=1;
 		testBoard.grille[Ligne+1][Colonne].murDroite=1;
     }
+
+    is_winning(testBoard, testBoard.colonnePionNoir, testBoard.lignePionNoir, black);
     
 	return 0;
 }
@@ -65,7 +67,8 @@ int is_winning ( struct board testBoard, int colonne, int ligne, int player)
     }
     else
     {
-		voisins( testBoard, colonne, ligne, player);
+        voisins( testBoard, colonne, ligne, player);
+        return 0;
     }
 }
 
@@ -81,23 +84,23 @@ void voisins(struct board testBoard, char colonne, char ligne,int player)
 	int Ligne = ligne -'1';
 	int Colonne = colonne - 'a';
 
-	if (is_reachable(testBoard, colonne, ligne,0))
+	if (is_reachable(testBoard, colonne, ligne,left) && pawn_at(colonne-1, ligne) == none)
 	{
 		testBoard.grille[Ligne][Colonne-1].pion=player;
-		is_winning(testBoard, colonne+1,ligne, player);
+		is_winning(testBoard, colonne-1,ligne, player);
 	}
 
-	if (is_reachable(testBoard, colonne, ligne, 1))
+	if (is_reachable(testBoard, colonne, ligne, down)  && pawn_at(colonne, ligne-1) == none)
 	{
 		testBoard.grille[ligne-1][colonne].pion=player;
 		is_winning(testBoard, colonne, ligne-1, player);
 	}
-	if ( is_reachable(testBoard, colonne, ligne, 2) )
+	if ( is_reachable(testBoard, colonne, ligne, right) && pawn_at(colonne+1, ligne) == none )
 	{
 		testBoard.grille[ligne][colonne+1].pion=player;
 		is_winning(testBoard, colonne+1, ligne, player);
 	}
-	if ( is_reachable(testBoard, colonne, ligne,4) )
+	if ( is_reachable(testBoard, colonne, ligne, up) && pawn_at(colonne, ligne+1) == none)
 	{
 		testBoard.grille[ligne+1][colonne].pion=player;
 		is_winning(testBoard, colonne, ligne+1, player);

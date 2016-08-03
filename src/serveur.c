@@ -32,33 +32,25 @@ int is_reachable (struct board Board, char colonne, char ligne, int direction)
 {
 	int presenceMur=0;
 
-	int Ligne = ligne -'1';
-	int Colonne = colonne - 'a';
-	int Direction = direction - '0';
-
-	switch (Direction)
+	switch (direction)
 	{
-		case 2:
-		  if (Board.grille[Ligne][Colonne].murDroite==1) presenceMur=1;
-		  else presenceMur =0;
+		case right:
+		  if (Board.grille[ligne][colonne].murDroite==1) presenceMur=1;
 		break;
 
-		case 1 :
-		  if (Board.grille[Ligne][Colonne].murBas==1) presenceMur=1;
-		  else presenceMur =0;
+		case down :
+		  if (Board.grille[ligne][colonne].murBas==1) presenceMur=1;
 		break;
 
-		case 0:
-		  if (Board.grille[Ligne][Colonne-1].murDroite==1) presenceMur=1;
-		  else presenceMur=0;
+		case left:
+		  if (Board.grille[ligne][colonne-1].murDroite==1) presenceMur=1;
 		break;
 
-		case 3:
-			if(Board.grille[Ligne+1][Colonne].murBas==1) presenceMur=1;
-			else presenceMur=0;
+		case up:
+			if(Board.grille[ligne-1][colonne].murBas==1) presenceMur=1;
 		break;
 	}
-	return !presenceMur;
+	return (1 - presenceMur);
 }
 
 
