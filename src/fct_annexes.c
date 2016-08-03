@@ -129,11 +129,14 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
         return 0;
 	}
 
-   
+    
 
 	//test pion noir
 	if (current_player_is(black))
-	{
+    {
+        printf("sesdfsdf\n");
+        int direction = determine_direction(bglobal->colonnePionNoir, bglobal->lignePionNoir, colonne, ligne);
+        printf("BLACK Direction is : %d\n ", direction);
 		//cas mouvement normal
         //xor
 		if ( (distance_between(colonne,bglobal->colonnePionNoir)==1 && distance_between(ligne,bglobal->lignePionNoir)==1) ==0 )
@@ -193,6 +196,9 @@ int is_move_valid(const struct board *bglobal, int colonne, int ligne)
    //test pion blanc
 	if (current_player_is(white))
 	{
+        int direction = determine_direction(bglobal->colonnePionBlanc, bglobal->lignePionBlanc, colonne, ligne);
+        printf("WHITE Direction is : %d\n ", direction);
+
 		if ((distance_between(colonne,bglobal->colonnePionBlanc) && distance_between(ligne,bglobal->lignePionBlanc))==0 ) //test: ce n'est pas un mouvement en diag
 		{
             if(colonne==Board.colonnePionBlanc)
@@ -303,4 +309,25 @@ int current_player() {
 
 int pawn_at(int line, int column) {
 	return bglobal->grille[line][column].pion;
+}
+
+int determine_direction(int srcColumn, int srcLine, int dstColumn, int dstLine) {
+    if ( srcColumn == dstColumn) { //Direction is either up or down 
+        if ( dstLine - srcLine == 1 )
+            return down;
+        else if (dstLine - srcLine == -1 )
+            return up;
+        else 
+            return invalid;
+    }
+    else if (srcLine == dstLine) { // Direction is either left or right 
+        if (dstColumn - srcColumn  == 1)
+            return right;
+        else if (dstColumn - srcColumn == -1)
+            return left;
+        else
+            return invalid;
+    }
+    else 
+        return invalid;
 }

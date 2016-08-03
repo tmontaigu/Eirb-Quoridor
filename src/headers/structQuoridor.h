@@ -42,7 +42,9 @@ enum directions {
     left = 0,
     down = 1,
     right = 2,
-    up = 3
+    up = 3,
+    invalid = 4
+
 };
 
 struct board Board;
@@ -65,4 +67,4 @@ int distance_between(int a, int b);
 int current_player_is(int playerColor);
 int current_player();
 int pawn_at(int line, int column);
-
+int determine_direction(int srcColumn, int srcLine, int dstColumn, int dstLine);
