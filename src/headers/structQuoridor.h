@@ -69,3 +69,5 @@ int current_player();
 int pawn_at(int line, int column);
 int determine_direction(int srcColumn, int srcLine, int dstColumn, int dstLine);
 int is_reachable (const struct board Board, char colonne, char ligne, int direction);
+void get_position_of(const struct board *b, int player, int *column, int *row);
+void play(const struct board *b);

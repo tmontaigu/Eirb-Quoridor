@@ -239,6 +239,17 @@ int pawn_at(int line, int column) {
 	return bglobal->grille[line][column].pion;
 }
 
+void get_position_of(const struct board *b, int player, int *column, int *row) {
+    if (player == black) {
+        *column = b->colonnePionNoir;
+        *row = b->lignePionNoir;
+    }
+    else if (player == white) {
+        *column = b->colonnePionBlanc;
+        *row = b->lignePionBlanc;
+    }
+}
+
 int determine_direction(int srcColumn, int srcLine, int dstColumn, int dstLine) {
     if ( srcColumn == dstColumn) { //Direction is either up or down 
         if ( dstLine - srcLine == 1 )

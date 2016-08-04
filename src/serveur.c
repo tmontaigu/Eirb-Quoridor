@@ -73,6 +73,7 @@ void move_pawn(const struct board *b, char colonne, char ligne)
 	int moveDone;
 
 
+
 	validMove=is_move_valid(b, Colonne, Ligne);
 
 	if (validMove==1)

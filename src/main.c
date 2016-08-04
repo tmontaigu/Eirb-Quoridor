@@ -12,6 +12,8 @@
 #endif
 
 #include "./headers/structQuoridor.h"
+#include "./headers/registry.h"
+
 
  int main(int argc, char **argv)
  {
@@ -23,19 +25,24 @@
 	display_board(bglobal);
 	Coups=fopen("fichier_coups.txt", "w+");//initialisation du fichier de Coups
 	fclose(Coups);
-
+/*
+    strategies_count = 0;
+    REGISTER_STRATEGY("random", &random__play);
+*/
 	int numberOfTurn = 0;
 	
 	while (gagnant(bglobal))
 	{
 		Board.action = 1;
 		Board.joueur = black;
-
+/*
 		while (Board.action==1)
 		{
 			random__play(bglobal); 
 		}
-				
+*/				
+        play(bglobal);
+
 		sleep(3);
 		clear_console();
 		printf("Noir Tour %d:\n",numberOfTurn);   

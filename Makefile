@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS= -Wall -std=c99
+CFLAGS= -Wall -std=c99 -g -O0
 LIBS = -lncurses
 
 
@@ -19,7 +19,8 @@ FILES_Quoridor = serveur.c \
 				 fct_annexes.c \
 				 is_blockable.c \
 				 main.c \
-				 random.c
+				 random.c \
+				 prompt_play.c
 
 FILES_Display = affichage.c
 
